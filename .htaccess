@@ -2,9 +2,10 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /api
+RewriteRule ^(teams|judge|print|web|pc2|cds|servers|all)/(get|state)/(mac|version)/?$ /api/$1-$2-$3.cgi  [L]
+RewriteRule ^(teams|judge|print|web|pc2|cds|servers|all)/(live|count)/?$ /api/$1-$2.cgi  [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /api/error404.html [L]
-
+RewriteRule . /api/error404.php [R=302,L]
 </IfModule>
 
