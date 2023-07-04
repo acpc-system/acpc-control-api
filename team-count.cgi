@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 ###API that counts the number of contestants mac in the contestantmac file
 #### Exit codes
 ##	0: Success
@@ -9,6 +9,10 @@ source create-json.sh
 source common.sh
 echo "Content-type: application/json"
 echo ""
+set -x
+/usr/sbin/wrapper
+echo ${?}
+set +x
 initResponse
 startJSON
 RC=0
@@ -27,4 +31,3 @@ else
 fi
 closeJSON
 printJSON
-exit RC
