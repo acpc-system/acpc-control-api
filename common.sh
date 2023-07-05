@@ -38,3 +38,31 @@ function parseQueryString {
 	IFS=${OIFS}
 	echo ${VALC}
 }
+
+### Function, parse the post response, and print the body. 
+## Return:
+##	0: Success
+#	1: Not a valid JSON format
+#	2: Not a post method
+function parsePost(){
+if [ "$REQUEST_METHOD" == "POST" ]; then
+
+    # The environment variabe $CONTENT_TYPE describes the data-type received
+        # The environment variabe $CONTENT_LENGTH describes the size of the data
+        read -n "$CONTENT_LENGTH" QUERY_STRING_POST        # read datastream
+        # The following lines will prevent XSS and check for valide JSON-Data.
+        # But these Symbols need to be encoded somehow before sending to this script
+        QUERY_STRING_POST=$(echo "$QUERY_STRING_POST" | sed "s/'//g" | sed 's/\$//g;s/`//g;s/\*//g;s/\\//g' )        # removes some symbols (like \ * ` $ ') to prevent XSS with Bash and SQL.
+        QUERY_STRING_POST=$(echo "$QUERY_STRING_POST" | sed -e :a -e 's/<[^>]*>//g;/</N;//ba')    # removes most html declarations to prevent XSS within documents
+        JSON=$(echo "$QUERY_STRING_POST" | jq .)        # json encode - This is a pretty save way to check for valide json code
+        if [ -z "${JSON}" ]
+        then
+               return 1 
+        fi
+
+else
+	return 2
+fi
+echo "${JSON}"
+return 0
+}

@@ -11,6 +11,7 @@
 source create-json.sh
 source common.sh
 source checkers.sh
+source macops.sh
 GETID=$(parseQueryString ${QUERY_STRING} "id")
 FILE="/acpc/adm/etc/dhcp/dhcpd.conf.hosts"
 echo "Content-type: application/json"
@@ -22,14 +23,12 @@ checkInteger ${GETID}
 [ ${?} -ne 0 ] && genError 101 "team ID is not an integer :${GETID}" 2
 [ ! -f ${FILE} ] && genError 401 "dhcp hosts file not exist" 3
 [ ! -r ${FILE} ] && genError 402 "dhcp hosts  file has no read permission"  4
-##1-Get the line number contains the pattern host team{id}
-LINEN=$(grep -n "^host *team${GETID} " ${FILE} | cut -d: -f1)
-[ -z ${LINEN} ] && genError 403 "team ${GETID} is not valid"  5
-## Now, we have the line number grep the line contains mac address after this line
-MAC=$(tail -n +15 ${FILE} |grep "hardware ethernet" | head -1 | awk ' { print $3 }'| sed 's/;//g')
+MAC=$(getMAC "team${GETID}")
+RET=${?}
+[ ${RET} -eq 1 ] && genError 403 "Host not found" 5
 insertJSON "status_code" I "200"
 insertJSON "status_message" S "ok" 
-insertJSON "response" S "${MAC}" L
+insertJSON "response" S "hostmac, ${MAC}" L
 closeJSON
 printJSON
 exit 0

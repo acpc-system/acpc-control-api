@@ -9,10 +9,6 @@ source create-json.sh
 source common.sh
 echo "Content-type: application/json"
 echo ""
-set -x
-/usr/sbin/wrapper
-echo ${?}
-set +x
 initResponse
 startJSON
 RC=0
