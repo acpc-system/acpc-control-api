@@ -20,6 +20,7 @@ function checkIP {
 	local IP="${1}"
 	local oIFS="${IFS}"
 	IFS="."
+	CO=0
 	for octet in ${IP}
 	do
 		checkInteger ${octet}
@@ -28,7 +29,12 @@ function checkIP {
 		then
 			return 1
 		fi
+		CO=$[CO+1]
 	done
+	if [ ${CO} -ne 4 ]
+	then
+		return 1
+	fi
 	IFS="${oIFS}"
 	return 0
 }
