@@ -68,3 +68,17 @@ function checkState() {
 	fi
 	return 0
 }
+
+##Function, accepts a host type, and check is it valid so return 0, not valid return 1
+function checkHosttype() {
+	local TYPE="${1}"
+	### Modify the VALIDTYPES to add/remove host type
+	local VALIDTYPES="team judge print web pc2 cds print scoreboard"
+	RES=$(echo "${VALIDTYPES}" | grep -c -w "${TYPE}")
+	if [ ${RES} -ne 0 ]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
