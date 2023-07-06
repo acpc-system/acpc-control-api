@@ -38,3 +38,33 @@ function checkIP {
 	IFS="${oIFS}"
 	return 0
 }
+
+###Function, check for service name is a valid, or contains invalid characters
+function checkService() {
+	local SERVICE="${1}"
+	local INVALIDCHAR='$*?\<>&[]()"'
+	##Check if the service name contains space
+	local RET=$(echo "${SERVICE}" | grep -c " ")
+	[ ${RET} -ne 0 ] && return 1
+	##Check if the service name contains any XSS
+	local LEN=$[$(echo ${INVALIDCHAR} | wc -c)-2]
+	local CHAR=""
+	for i in $(seq 0 ${LEN})
+	do
+		CHAR=${INVALIDCHAR:${i}:1}
+		#### Used fgrep to do not interpret any special character
+		RET=$(echo "${SERVICE}" | fgrep -c "${CHAR}")
+		[ ${RET} -ne 0 ] && return 1
+	done
+	return 0
+}
+
+## Function, accepts the state as a parameter, return 0 if the parameter is either true or falce. Otherwise returns 1
+function checkState() {
+	local STATE="${1}"
+	if [ ${STATE} != "true" ] && [ ${STATE} != "false" ]
+	then
+		return 1
+	fi
+	return 0
+}
