@@ -35,6 +35,7 @@ fi
 RES=$(sudo systemctl ${OP} ${GETSERVICE})
 if  [ ${?} -ne 0 ] 
 then
+	RES=$(sudo journalctl -xeu ${GETSERVICE}.service)
 	genError 102 "Error: ${RES}" 3
 fi
 insertJSON "status_code" I "200"
