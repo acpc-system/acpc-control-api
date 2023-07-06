@@ -62,7 +62,7 @@ function checkService() {
 ## Function, accepts the state as a parameter, return 0 if the parameter is either true or falce. Otherwise returns 1
 function checkState() {
 	local STATE="${1}"
-	if [ ${STATE} != "true" ] && [ ${STATE} != "false" ]
+	if [ ${STATE} != "true" ] && [ ${STATE} != "false" ] && [ ${STATE} != "start" ] && [ ${STATE} != "stop" ] && [ ${STATE} != "restart" ]
 	then
 		return 1
 	fi

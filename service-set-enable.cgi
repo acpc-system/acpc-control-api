@@ -39,7 +39,7 @@ then
 fi
 insertJSON "status_code" I "200"
 insertJSON "status_message" S "ok" 
-insertJSON "response" S "enabled, ${RES}" L
+insertJSON "response" S "${GETSTATE}" L
 closeJSON
 printJSON
 exit 0
