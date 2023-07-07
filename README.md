@@ -3,7 +3,7 @@ API used in the control server. <br>
 * The host type means the type of host , which team|judge|print|web|pc2|cds|print|scoreboard.<br>
 * host-count.cgi: Count number of mac addresses for a host type in dhcpd hosts<br>
 Usage:<br>
-http://ServerAddress/api/<<host type>>/count<br>
+http://ServerAddress/api/[host type]/count<br>
 Exit codes:<br>
 0: Success<br>
 1: Insufficient parameters, missed host type<br>
