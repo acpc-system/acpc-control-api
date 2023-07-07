@@ -18,6 +18,7 @@
 ##	12: Can not open source file, or can not write to temp file
 ##	13: Can not open  temp file to the dhcp hosts file
 ##	14:Invalid acpc host type
+##	15: MAC Address field does not exists in POst data
 #### The post data must be in json and quated in '
 ## Example: '{"hostmac": "00:00:00:00:00:01"}'
 ### Thanks goes to https://riptutorial.com/bash/example/29665/request-method--post--w-json
@@ -40,7 +41,8 @@ case ${RETPOST} in
                 genError 405 "Error, not post method" 10
                 ;;
 esac
-newMAC=$(echo "${DATA}" | jq .hostmac  | sed 's/"//g')
+newMAC=$(getPostField "${DATA}" "mac")
+[ ${?} -ne 0 ] && genError 410 "Post data does not contain mac field" 15
 checkMAC "${newMAC}"
 [ ${?} -ne 0 ] && genError 408 "Invalid MAC Address format" 7
 

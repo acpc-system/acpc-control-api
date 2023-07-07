@@ -17,3 +17,12 @@ function getMAC() {
 	echo "${MAC}"
 	return 0
 }
+
+
+##Function search for a MAC, return 0 if MAC not exists, 1 exits
+function findMAC() {
+        local MAC="${1}"
+        FILE="/acpc/adm/etc/dhcp/dhcpd.conf.hosts"
+        return $(egrep -c " ${MAC}( +|;)" ${FILE})
+}
+

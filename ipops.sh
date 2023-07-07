@@ -18,3 +18,10 @@ function getIP() {
         return 0
 }
 
+##Function searches for  an IP, return 0 if IP not exists, 1 exits
+function findIP() {
+	local IP="${1}"
+	FILE="/acpc/adm/etc/dhcp/dhcpd.conf.hosts"
+	return $(egrep -c " ${IP}( +|;)" ${FILE})
+}
+

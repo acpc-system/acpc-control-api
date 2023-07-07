@@ -66,3 +66,19 @@ fi
 echo "${JSON}"
 return 0
 }
+
+### Function takes a post data, and field name. Prints out the value for this field and return 0, return 1 if the field is not found
+## The post data in JSON format
+function getPostField() {
+	local DATA="${1}"
+	local KEY="${2}"
+	local VAL=$(echo "${DATA}" | jq ."${KEY}")
+	if [ ${VAL} == "null" ] 
+	then
+		return 1
+	else
+		VAL=$(echo ${VAL} | sed 's/"//g')
+		echo "${VAL}"
+		return 0
+	fi
+}
