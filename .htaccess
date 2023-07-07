@@ -2,11 +2,11 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /api
-RewriteRule ^(apache2|bind9|named|isc-dhcp-server|tftpd-hpa)/get/(enable|active) /api/service-get-$2.cgi?service=$1 [L]
-RewriteRule ^(apache2|bind9|named|isc-dhcp-server|tftpd-hpa)/set/enable/(true|false) /api/service-set-enable.cgi?service=$1&state=$2 [L]
-RewriteRule ^(apache2|bind9|named|isc-dhcp-server|tftpd-hpa)/set/active/(start|stop|restart) /api/service-set-active.cgi?service=$1&state=$2 [L]
-RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/(get|state)/(mac|version)/?$ /api/$1-$2-$3.cgi  [L]
+RewriteRule ^(apache2|bind9|named|isc-dhcp-server|tftpd-hpa)/get/(enable|active)/?$ /api/service-get-$2.cgi?service=$1 [L]
+RewriteRule ^(apache2|bind9|named|isc-dhcp-server|tftpd-hpa)/set/enable/(true|false)/?$ /api/service-set-enable.cgi?service=$1&state=$2 [L]
+RewriteRule ^(apache2|bind9|named|isc-dhcp-server|tftpd-hpa)/set/active/(start|stop|restart)$ /api/service-set-active.cgi?service=$1&state=$2 [L]
 RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/(get|set|state)/(mac|version|ip)/?$ /api/host-$3-$4.cgi?id=$2&type=$1  [L]
+RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/(remove|insert)/?$ /api/host-$3.cgi?id=$2&type=$1  [L]
 RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/(live|count|dead)/?$ /api/host-$2.cgi?type=$1  [L]
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
