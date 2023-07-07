@@ -112,7 +112,7 @@ else
 fi
 echo "${HOSTDATA}" > ${TMPFILE}
 [ ${?} -ne 0 ] && genError 406 "Can not read source file, or can not write to temp file" 12
-cp ${TMPFILE} ${FILE}
+cat ${TMPFILE} >> ${FILE}
 [ ${?} -ne 0 ] && genError 407 "Can not copy temp file to dhcp host" 13
 rm ${TMPFILE}
 if [ ${?} -eq 0 ]
