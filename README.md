@@ -6,11 +6,11 @@ Usage:<br>
 http://ServerAddress/api/<host type>/count
 Exit codes:<br>
 0: Success<br>
-1: Insufficient parameters, missed host type
-2: Invalid host type, sent a word other than supported type
-3: dhcpd.conf.hosts is not found
-4: dhcpd.conf.hosts can not be read
-5: Generic error
+1: Insufficient parameters, missed host type<br>
+2: Invalid host type, sent a word other than supported type<br>
+3: dhcpd.conf.hosts is not found<br>
+4: dhcpd.conf.hosts can not be read<br>
+5: Generic error<br>
 Response:<br>
 In case of success, the API returns a JSON response with status code 200, and response with the number of that host defined in dhcpd.conf.hosts
 
