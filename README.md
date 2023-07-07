@@ -4,6 +4,10 @@ API used in the control server
 Examples:<br>
  /api/team/count to count the number of teams<br>
  /api/judge/count to count the number of judges<br>
-* judge-count.cgi: Count number of mac addersses in judgemac file
-* team-get-mac.cgi: Returns a mac for certain team
-* team-set-mac.cgi: Set a mac for certain team
+
+* host-get-ip.cgi: Retrieve the IP address of a certain host from dhcpd hosts<br>
+Examples: <br>
+ /api/team/2/get/ip to retrieve the ip address for the host team2
+ /api/judge/3/get/ip to retrieve the ip address for the host judge3
+
+
