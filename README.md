@@ -7,7 +7,7 @@ Examples:<br>
 
 * host-get-ip.cgi: Retrieve the IP address of a certain host from dhcpd hosts<br>
 Examples: <br>
- /api/team/2/get/ip to retrieve the ip address for the host team2
- /api/judge/3/get/ip to retrieve the ip address for the host judge3
+ /api/team/2/get/ip to retrieve the ip address for the host team2<br>
+ /api/judge/3/get/ip to retrieve the ip address for the host judge3<br>
 
 
