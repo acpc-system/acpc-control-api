@@ -1,6 +1,19 @@
 # acpc-control-api
-API used in the control server
+API used in the control server. <br>
+* The host type means the type of host , which team|judge|print|web|pc2|cds|print|scoreboard.<br>
 * host-count.cgi: Count number of mac addresses for a host type in dhcpd hosts<br>
+Usage:<br>
+http://ServerAddress/api/<host type>/count
+Exit codes:<br>
+0: Success<br>
+1: Insufficient parameters, missed host type
+2: Invalid host type, sent a word other than supported type
+3: dhcpd.conf.hosts is not found
+4: dhcpd.conf.hosts can not be read
+5: Generic error
+Response:<br>
+In case of success, the API returns a JSON response with status code 200, and response with the number of that host defined in dhcpd.conf.hosts
+
 Examples:<br>
  /api/team/count to count the number of teams<br>
  /api/judge/count to count the number of judges<br>
