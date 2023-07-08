@@ -82,3 +82,26 @@ function getPostField() {
 		return 0
 	fi
 }
+
+##Function, accepts array of strings, and return them as comma separated list, with each elements rurrounded by "
+##	returns
+##	0: Success
+##	1: not enough parameters
+function arrayToCSV () {
+	[ ${#} -ne 1 ] && return 1
+	local DATA="${1}"
+	local RES=""
+	localCO=1
+	for EL in ${DATA}
+	do
+		if [ ${CO} -eq 1 ]
+		then
+			CO=2
+			RES="\"${EL}\""
+		else
+			RES="${RES},\"${EL}\""
+		fi
+	done
+	echo "${RES}"
+	return 0
+}
