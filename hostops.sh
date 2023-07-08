@@ -1,4 +1,5 @@
 ### Script contains all host operations needed
+source checkers.sh
 
 ## Function takes an host and prints out start line number, and end line number and returns 0, otherwise returns 1 (not found) 
 #	Returns:
@@ -16,5 +17,20 @@ function getHost() {
 	local LINEE=$(tail -n +${LINES} ${FILE} |grep -n "}" | head -1| cut -d: -f1)
 	LINEE=$[LINEE-1+LINES]
 	echo "${LINES}:${LINEE}"
+	return 0
+}
+
+
+##Function prints out all host of host type type
+##	0:success
+##	1:Invalid host type
+function listHosts() {
+	local TYPE="${1}"
+	FILE="/acpc/adm/etc/dhcp/dhcpd.conf.hosts"
+	checkHosttype "${TYPE}"
+	[ ${?} -ne 0 ] && return 1
+	#LINES=$(egrep "^ *host ${TYPE}[0-9]*( *|\{)" ${FILE}| awk 'BEGIN {ORS=","} { print "\""$2"\"" } ')
+	LINES=$(egrep "^ *host ${TYPE}[0-9]*( *|\{)" ${FILE}| awk '{ print $2 } ')
+	echo "${LINES}"
 	return 0
 }

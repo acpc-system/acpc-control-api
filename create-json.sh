@@ -24,7 +24,33 @@ function closeJSON {
 function insertJSON {
 	local KEY="\"${1}\""
 	local TYPE=${2}
-	[ ${TYPE} == 'I' ] && local VALUE="${3}" || local VALUE="\"${3}\""
+	local DATA="${3}"
+	case ${TYPE} in
+		I)
+			local VALUE="${DATA}"
+			;;
+		S)
+			local VALUE="\"${DATA}\""
+			;;
+		A)
+			local VALUE="[ "
+			OIFS=${IFS}
+			IFS=','
+			CO=1
+			for H in ${DATA}
+			do
+				if [ ${CO} -eq 1 ]
+				then
+					VALUE="${VALUE} ${H}"
+					CO=2
+				else
+					VALUE="${VALUE}, ${H}"
+				fi
+			done
+			IFS=${OIFS}
+			VALUE="${VALUE} ]"
+			;;
+	esac
 	jsonResponse="${jsonResponse}${KEY}: ${VALUE}"
 	[ -z ${4} ] && jsonResponse="${jsonResponse},"
 }
