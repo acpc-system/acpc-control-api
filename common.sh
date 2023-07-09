@@ -2,6 +2,7 @@
 ##	1st par: status_code
 ##	2nd par: status_message
 ##	3rd par: Main script exit code
+source checkers.sh
 function genError {
 	local CODE=${1}
 	local MSG="${2}"
@@ -104,4 +105,28 @@ function arrayToCSV () {
 	done
 	echo "${RES}"
 	return 0
+}
+
+###Function takes a host, 
+#	return 
+#	0 if listed as bad
+#	1 is not listed, 
+#	3 enough parameters)
+#	4 file does not exists
+#	5 file has no read permission
+function isBad() {
+	[ ${#} -ne 1 ] && return 3
+	local HOST="${1}"
+	local FILE="/acpc/adm/etc/badpcs"
+	isExist "${FILE}"
+	[ ${?} -ne 0 ] && return 4
+	isRead "${FILE}"
+	[ ${?} -ne 0 ] && return 5
+	N=$(grep -c "^${HOST}$" ${FILE})
+	if [ ${N} -eq 0 ] 
+	then
+		return 0
+	else
+		return 1
+	fi
 }

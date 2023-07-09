@@ -82,3 +82,39 @@ function checkHosttype() {
 		return 1
 	fi
 }
+
+##Function accepts file name
+## returns 
+#	0 if exists
+#	1 if not exists
+#	2 not enough parameters
+function isExist() {
+	[ ${#} -ne 1 ] && return 2
+	local FILE="${1}"
+	[ -f "${FILE}" ] && return 0
+	return 1
+}
+
+##Function accepts file name
+## returns
+#       0 if can read
+#       1 if can not read 
+#       2 not enough parameters
+function isRead() {
+        [ ${#} -ne 1 ] && return 2
+        local FILE="${1}"
+        [ -r "${FILE}" ] && return 0
+        return 1
+}
+
+##Function accepts file name
+## returns
+#       0 if can write
+#       1 if can not write
+#       2 not enough parameters
+function isWrite() {
+        [ ${#} -ne 1 ] && return 2
+        local FILE="${1}"
+        [ -w "${FILE}" ]  && return 0
+        return 1
+}
