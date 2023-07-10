@@ -40,6 +40,32 @@ function parseQueryString {
 	echo ${VALC}
 }
 
+
+#Function, pars the post response, and save it to a file 
+##	parameters:
+##		file name
+##Return
+#	0: Success
+#	1: not enough parameters
+#	2: not a post method
+#	3: Could not update the file
+function parsePostFile() {
+	local TMPFILE="${1}"
+	[ ${#} -ne 1 ] && return 1
+	local DATA=""
+	if [ "$REQUEST_METHOD" == "POST" ]; then
+
+	while read DATA
+	do
+		echo "${DATA}" >> ${TMPFILE}
+	done
+	else
+		return 2
+	fi
+	return 0;
+}
+
+
 ### Function, parse the post response, and print the body. 
 ## Return:
 ##	0: Success

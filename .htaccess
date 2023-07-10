@@ -12,6 +12,7 @@ RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/(remove|in
 RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/(live|count|dead)/?$ /api/host-$2.cgi?type=$1  [L]
 RewriteRule ^badpcs/(get|reset)/?$	/api/badpcs-$1.cgi [L]
 RewriteRule ^badpcs/(add|remove)/(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/?$	/api/badpcs-$1.cgi?id=$3&type=$2 [L]
+RewriteRule ^macs/upload/(team|judge|print|web|pc2|cds|print|scoreboard)/?$	/api/upload-macs.cgi?type=$1
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule . /api/error404.php [R=302,L]
