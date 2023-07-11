@@ -118,3 +118,19 @@ function isWrite() {
         [ -w "${FILE}" ]  && return 0
         return 1
 }
+
+##Function accepts a string, and return if this string is a valid dhcp.config.<string> or no
+##	Parameter:
+##		dhcp config file
+##	Return:
+#		0: Success, Valid
+#		1: failed, Not valud
+#		2: Not enough parameter
+function checkDHCPconf () {
+	[ ${#} -ne 1 ] && return 2
+	local EXT="${1}"
+	local VALIDCONF="hosts subnet options"
+	N=$(echo "${VALIDCONF}" | grep -w -c ${EXT})
+	[ ${N} -ne 0 ] && return 0
+	return 1
+}
