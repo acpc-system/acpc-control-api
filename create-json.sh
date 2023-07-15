@@ -26,6 +26,32 @@ function insertJSON {
 	local TYPE=${2}
 	local DATA="${3}"
 	case ${TYPE} in
+		SJ)
+			###Sub JSON
+			local CO=1
+			local VALUE="{"
+			local RKEY=""
+			local RVAL=""
+			local LINE=""
+			local TOTAL=$(echo "${DATA}"| wc -l)
+			for L in $(seq 1 ${TOTAL})
+			do	
+				LINE=$(echo "${DATA}" | head -1 | sed 's/"/\\\"/g')
+				DATA=$(echo "${DATA}" | tail -n +2)
+				if [ ${CO} -eq 1 ]
+                        	then
+                                	#VALUE="${VALUE} \"${RKEY}\": \"${RVAL}\""
+                                	VALUE="${VALUE} ${LINE}"
+                        	else
+                                	VALUE="${VALUE}, ${LINE}"
+                        	fi
+				CO=$[CO+1]
+			done
+			VALUE="${VALUE} }"
+
+			VALUE=$(echo "${DATA}" | sed 's/"/\\\"/g')
+			VALUE="[ \"${VALUE}\" ]"
+			;;
 		I)
 			local VALUE="${DATA}"
 			;;

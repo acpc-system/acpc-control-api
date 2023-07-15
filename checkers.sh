@@ -134,3 +134,32 @@ function checkDHCPconf () {
 	[ ${N} -ne 0 ] && return 0
 	return 1
 }
+
+### Function accepts a subnet id, and subnet mask. Check is the subnet id is a valid network id or no
+##Paramters:
+##	1-subnet id in form of ip.ip.ip.ip
+##	2-mask in form if integer from 0 to 32
+##	Returns:
+#		0: Success
+##		1: invalid subnet
+function checkSubnet() {
+	local NET="${1}"
+	local MASK="${2}"
+	local NNET=""
+	local TERM=0
+	local GMASK=$(getSubnet ${MASK})
+	[ ${?} -ne 0 ] && return 1
+	for i in $(seq 1 4) 
+	do
+		NETOCT=$(echo "${NET}" | cut -d. -f ${i})
+		MASKOCT=$(echo "${GMASK}" | cut -d. -f ${i})
+		TERM=$[NETOCT & MASKOCT]
+		if [ ${i} -eq 1 ]
+		then
+			NNET="${TERM}"
+		else
+			NNET="${NNET}.${TERM}"
+		fi
+	done
+	[ ${NNET} == ${NET} ] && return 0  || return 1
+}

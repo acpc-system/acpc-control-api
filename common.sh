@@ -156,3 +156,42 @@ function isBad() {
 		return 1
 	fi
 }
+
+
+###Function converts from integer to netmask octets
+##Parameters:
+#	integer
+##	return 
+##		0: Success
+##		1: Invalid netmask integer
+##		2: not enough paramters
+function getSubnet() {
+	[ ${#} -ne 1 ] && return 2
+	local MASKINT=${1}
+	local MASK=""
+	if [ ${MASKINT} -le 0 ] || [ ${MASKINT} -gt 32 ]
+	then
+		return 1
+	fi
+	local NO255=$[ ${MASKINT} / 8 ]
+	for j in $(seq 1 ${NO255} )
+	do
+		if [ ${j} -eq 1 ]
+		then
+			MASK="255"
+		else
+			MASK="${MASK}.255"
+		fi
+	done
+	local RES=$[ NO255 + 1]
+	for j in $(seq ${RES} 4)
+	do
+		NO1=$[ MASKINT % 8 ]
+		MASKINT=0
+		[ ${NO1} -eq 0 ] && VAL="0" || VAL=$[256 - 2 ** NO1]
+		MASK="${MASK}.${VAL}"
+	done
+	echo "${MASK}"
+	return 0
+}
+
