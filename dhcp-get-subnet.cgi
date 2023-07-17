@@ -1,4 +1,5 @@
 #!/bin/bash 
+
 ###API that get the dhcp subnet config files  
 ###Parameters:
 ##	net: Network ID
@@ -46,6 +47,12 @@ isExist "${FILE}"
 [ ${?} -ne 0 ] && genError 103 "DHCP subnets configuration is not exit" 4
 isRead "${FILE}"
 [ ${?} -ne 0 ] && genError 102 "DHCP subnets configuraiton has no read permission" 3
+
+STARTLINE=$(grep -n "^ *subnet ${GETNET} *netmask *${FULLMASK} *{" ${FILE}| cut -f1 -d:)
+ENDLINE=$(tail -n +${STARTLINE} ${FILE} | grep -n "}" | tail -1 | cut -f1 -d:)
+ENDLINE=$[STARTLINE+ENDLINE-1]
+TMPFILE=$(mktemp)
+sed -n ${STARTLINE},${ENDLINE}p ${FILE} > ${TMPFILE}
 DATA=""
 CO=1
 while read LINE
@@ -57,7 +64,8 @@ do
 	else
 		DATA="${DATA},\"${LINE}\""
 	fi
-done < ${FILE}
+done < ${TMPFILE}
+rm ${TMPFILE}
 insertJSON "status_code" I "200"
 insertJSON "status_message" S "ok" 
 insertJSON "response" A "${DATA}" L
