@@ -14,7 +14,7 @@ RewriteRule ^badpcs/(get|reset)/?$	/api/badpcs-$1.cgi [L]
 RewriteRule ^badpcs/(add|remove)/(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/?$	/api/badpcs-$1.cgi?id=$3&type=$2 [L]
 RewriteRule ^macs/upload/(team|judge|print|web|pc2|cds|print|scoreboard)/?$	/api/upload-macs.cgi?type=$1
 RewriteRule ^dhcp/reset/(hosts|options|subnet)/?$	/api/dhcp-reset.cgi?type=$1
-RewriteRule ^dhcp/(get|set)/subnet/(.*)/([0-9]|[0-2][0-9]|3[0-2])/?$	/api/dhcp-$1-subnet.cgi?net=$2&mask=$3
+RewriteRule ^dhcp/(get|add|remove)/subnet/(.*)/([0-9]|[0-2][0-9]|3[0-2])/?$	/api/dhcp-$1-subnet.cgi?net=$2&mask=$3
 RewriteRule ^dhcp/(get|set)/options/?$	/api/dhcp-$1-options.cgi
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d

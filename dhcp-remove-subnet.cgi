@@ -1,5 +1,5 @@
 #!/bin/bash 
-###API that get the dhcp subnet config files  
+###API that removes the dhcp subnet config files  
 ###Parameters:
 ##	net: Network ID
 ##	mask mask as an integer 
@@ -13,6 +13,7 @@
 ##	6: Not defined subnet
 ##	7: subnet config file isnot found
 ##	8: Subnet config file has no read permission
+##	9: Subnet config file has no write permission
 source checkers.sh
 source create-json.sh
 source common.sh
@@ -34,33 +35,24 @@ isExist "${FILE}"
 [ ${?} -ne 0 ] && genError 412 "subnet file not exist" 7
 isRead "${FILE}"
 [ ${?} -ne 0 ] && genError 413 "subnet file has no read permission" 8
+isWrite "${FILE}"
+[ ${?} -ne 0 ] && genError 414 "subnet file has no write permission" 9
 FULLMASK=$(getSubnet ${GETMASK})
 FLAG=$(grep -c "^ *subnet *${GETNET} *netmask *${FULLMASK} *{" ${FILE})
 [ ${FLAG} -eq 0 ] && genError 411 "No defined subnet: ${COMMAND}" 6
 
-SUBNET=$(cat ${FILE})
+STARTLINE=$(grep -n "^ *subnet ${GETNET} *netmask *${FULLMASK} *{" ${FILE}| cut -f1 -d:)
+ENDLINE=$(tail -n +${STARTLINE} ${FILE} | grep -n "}" | tail -1 | cut -f1 -d:)
+ENDLINE=$[STARTLINE+ENDLINE-1]
+TMPFILE=$(mktemp)
+sed "${STARTLINE},${ENDLINE}d" ${FILE} > ${TMPFILE}
+cp ${TMPFILE} ${FILE}
+rm ${TMPFILE}
 initResponse
 startJSON
-FILE="${FILE}"
-isExist "${FILE}"
-[ ${?} -ne 0 ] && genError 103 "DHCP subnets configuration is not exit" 4
-isRead "${FILE}"
-[ ${?} -ne 0 ] && genError 102 "DHCP subnets configuraiton has no read permission" 3
-DATA=""
-CO=1
-while read LINE
-do
-	if [ ${CO} -eq 1 ]
-	then
-		DATA="\"${LINE}\""
-		CO=2
-	else
-		DATA="${DATA},\"${LINE}\""
-	fi
-done < ${FILE}
 insertJSON "status_code" I "200"
 insertJSON "status_message" S "ok" 
-insertJSON "response" A "${DATA}" L
+insertJSON "response" S "removed" L
 closeJSON
 printJSON
 exit 0

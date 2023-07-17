@@ -104,11 +104,32 @@ function getPostField() {
 	then
 		return 1
 	else
-		VAL=$(echo ${VAL} | sed 's/"//g')
+		VAL="$(echo ${VAL} | sed 's/"//g')"
 		echo "${VAL}"
 		return 0
 	fi
 }
+
+### Function takes a post data, and field name. Prints out the value for this field  (The field is a JSON array) and return 0, return 1 if the field is not found
+## The post data in JSON format
+function getPostFieldArray() {
+        local DATA="${1}"
+        local KEY="${2}"
+	local CO=1
+	local -n DATAARR="${3}"
+	#echo "${DATA} "|jq -r ".conf[]" | while read -r LINE
+	#echo "${DATA}" | jq '.conf.[]'
+	TMPFILE=$(mktemp)
+	echo "${DATA}" | jq -r ".${KEY}[]" >> ${TMPFILE}
+	while read LINE
+	do
+		DATAARR+=("${LINE}")
+	done < ${TMPFILE}
+	rm ${TMPFILE}
+	#[ ${CO} -eq 1 ] && return 1
+	return 0
+}
+
 
 ##Function, accepts array of strings, and return them as comma separated list, with each elements rurrounded by "
 ##	returns
