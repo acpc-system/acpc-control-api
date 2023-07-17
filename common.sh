@@ -100,7 +100,7 @@ function getPostField() {
 	local DATA="${1}"
 	local KEY="${2}"
 	local VAL=$(echo "${DATA}" | jq ."${KEY}")
-	if [ ${VAL} == "null" ] 
+	if [ "${VAL}" == "null" ] 
 	then
 		return 1
 	else
