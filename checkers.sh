@@ -11,7 +11,7 @@ function checkInteger {
 function checkMAC {
         local N="${1}"
         local RET=0
-        RET=$(echo ${N} | grep -c -v "^[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]$")
+        RET=$(echo ${N} | grep -c -v -i "^[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]:[0-9A-F][0-9A-F]$")
         return ${RET}
 }
 

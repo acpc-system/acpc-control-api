@@ -53,6 +53,7 @@ function parsePostFile() {
 	local TMPFILE="${1}"
 	[ ${#} -ne 1 ] && return 1
 	local DATA=""
+	set -x
 	if [ "$REQUEST_METHOD" == "POST" ]; then
 
 	while read DATA
@@ -62,6 +63,7 @@ function parsePostFile() {
 	else
 		return 2
 	fi
+	set +x
 	return 0;
 }
 
