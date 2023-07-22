@@ -7,6 +7,9 @@
 ##	1: Insufficient parameter
 ##	2: Invalid host type
 ##	3: invalid ip address
+##	4: HOst mac is not found
+##	5: HOst mac has no read permission
+##	7: Error coming from insert mac API
 #### The post data must be in json and quated in '
 
 source create-json.sh
@@ -36,24 +39,31 @@ TEAMN="${GETSHOST}"
 while read LINE
 do
 	echo "${LINE}"
-	curl -X POST -H "Content-Type: application/json" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert
-	TEAMN=$[TEAMN+1]
-	OCT1=$(echo ${IP} | cut -d. -f 1)
-	OCT2=$(echo ${IP} | cut -d. -f 2)
-	OCT3=$(echo ${IP} | cut -d. -f 3)
-	OCT4=$(echo ${IP} | cut -d. -f 4)
-	OCT4=$[OCT4+1]
-	if [ ${OCT4} -gt 255 ]
+	MSG=$(curl -s -X POST -H "Content-Type: application/json" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert)
+	CODE=$(echo "${MSG}" | jq .status_code)
+	echo "${CODE}"
+	if [ ${CODE} -eq 200 ] 
 	then
-		OCT4=0
-		OCT3=$[OCT3+1]
-		if [ ${OCT3} -gt 255 ]
+		TEAMN=$[TEAMN+1]
+		OCT1=$(echo ${IP} | cut -d. -f 1)
+		OCT2=$(echo ${IP} | cut -d. -f 2)
+		OCT3=$(echo ${IP} | cut -d. -f 3)
+		OCT4=$(echo ${IP} | cut -d. -f 4)
+		OCT4=$[OCT4+1]
+		if [ ${OCT4} -gt 255 ]
 		then
-			OCT3=0
-			OCT2=$[OCT2+1]
+			OCT4=0
+			OCT3=$[OCT3+1]
+			if [ ${OCT3} -gt 255 ]
+			then
+				OCT3=0
+				OCT2=$[OCT2+1]
+			fi
 		fi
+		IP="${OCT1}.${OCT2}.${OCT3}.${OCT4}"
+	else
+		genError 407 "$(echo "${MSG}" | jq .status_message)" 7
 	fi
-	IP="${OCT1}.${OCT2}.${OCT3}.${OCT4}"
 done < "${FILE}"
 	initResponse
 	startJSON
