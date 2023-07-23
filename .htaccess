@@ -9,7 +9,7 @@ RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/upload/mac/?$ /api/
 RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/(get|set)/(mac|version|ip)/?$ /api/host-$3-$4.cgi?id=$2&type=$1  [L]
 RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/state/?$ /api/host-state.cgi?id=$2&type=$1  [L]
 RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/(remove|insert)/?$ /api/host-$3.cgi?id=$2&type=$1  [L]
-RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/(live|count|dead)/?$ /api/host-$2.cgi?type=$1  [L]
+RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/(live|count|dead|list)/?$ /api/host-$2.cgi?type=$1  [L]
 RewriteRule ^badpcs/(get|reset)/?$	/api/badpcs-$1.cgi [L]
 RewriteRule ^badpcs/(add|remove)/(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/?$	/api/badpcs-$1.cgi?id=$3&type=$2 [L]
 RewriteRule ^macs/upload/(team|judge|print|web|pc2|cds|print|scoreboard)/?$	/api/upload-macs.cgi?type=$1
