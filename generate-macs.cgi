@@ -40,7 +40,9 @@ while read LINE
 do
 	echo "${LINE}"
 	MSG=$(curl -s -X POST -H "Content-Type: application/json" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert)
+	#echo "Adding team${TEAMN} with mac ${LINE} and IP ${IP}"
 	CODE=$(echo "${MSG}" | jq .status_code)
+	#CODE=200
 	echo "${CODE}"
 	if [ ${CODE} -eq 200 ] 
 	then
@@ -62,7 +64,7 @@ do
 		fi
 		IP="${OCT1}.${OCT2}.${OCT3}.${OCT4}"
 	else
-		genError 407 "$(echo "${MSG}" | jq .status_message)" 7
+		genError 407 "$(echo "${MSG}" | jq .status_message) ${IP} ${LINE} ${GETTYPE}${TEAMN}" 7
 	fi
 done < "${FILE}"
 	initResponse
