@@ -25,4 +25,10 @@ RewriteRule ^netboot/(check|generate)/(.*\.iso)/?$	/api/netboot-$1.cgi?iso=$2
 #RewriteCond %{REQUEST_FILENAME} !-d
 #RewriteRule . /api/error404.php [R=302,L]
 </IfModule>
+AuthType Basic
+AuthName "ACPC Control private area"
+AuthUserFile "/etc/api.passwd"
+#AuthGroupFile "/etc/api.group"
+#Require group admins
+Require user admin
 
