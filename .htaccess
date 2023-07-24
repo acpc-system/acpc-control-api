@@ -13,6 +13,8 @@ RewriteRule ^(team|judge|print|web|pc2|cds|print|scoreboard)/(live|count|dead|li
 RewriteRule ^badpcs/(get|reset)/?$	/api/badpcs-$1.cgi [L]
 RewriteRule ^badpcs/(add|remove)/(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/?$	/api/badpcs-$1.cgi?id=$3&type=$2 [L]
 RewriteRule ^macs/upload/(team|judge|print|web|pc2|cds|print|scoreboard)/?$	/api/upload-macs.cgi?type=$1
+RewriteRule ^macs/reset/?$	/api/reset-macs.cgi
+RewriteRule ^macs/list/?$	/api/list-macs.cgi
 RewriteRule ^macs/generate/(team|judge|print|web|pc2|cds|print|scoreboard)/([0-9]*)/(.*)/?$	/api/generate-macs.cgi?type=$1&shost=$2&sip=$3
 RewriteRule ^dhcp/list/(hosts|options|subnet)/?$	/api/dhcp-list.cgi?type=$1
 RewriteRule ^dhcp/reset/(hosts|options|subnet)/?$	/api/dhcp-reset.cgi?type=$1

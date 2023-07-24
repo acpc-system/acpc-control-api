@@ -29,7 +29,7 @@ checkHosttype "${GETTYPE}"
 [ ${?} -ne 0 ] && genError 101 "Invalid ACPC Host type" 2
 checkIP "${GETSIP}"
 [ ${?} -ne 0 ] && genError 101 "Invalid IP Address" 3
-FILE="/acpc/adm/etc/${GETTYPE}"
+FILE="/acpc/adm/tmp/macs"
 isExist "${FILE}"
 [ ! -f ${FILE} ] && genError 102 "Host mac file not found" 4
 isRead "${FILE}"
@@ -38,33 +38,35 @@ IP="${GETSIP}"
 TEAMN="${GETSHOST}"
 while read LINE
 do
-	echo "${LINE}"
-	MSG=$(curl -s -X POST -H "Content-Type: application/json" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert)
-	#echo "Adding team${TEAMN} with mac ${LINE} and IP ${IP}"
-	CODE=$(echo "${MSG}" | jq .status_code)
-	#CODE=200
-	echo "${CODE}"
-	if [ ${CODE} -eq 200 ] 
+	## Check for mac exists or no
+	findMAC "${LINE}"
+	RET=${?}
+	if  [ ${RET} -eq 0 ] 
 	then
-		TEAMN=$[TEAMN+1]
-		OCT1=$(echo ${IP} | cut -d. -f 1)
-		OCT2=$(echo ${IP} | cut -d. -f 2)
-		OCT3=$(echo ${IP} | cut -d. -f 3)
-		OCT4=$(echo ${IP} | cut -d. -f 4)
-		OCT4=$[OCT4+1]
-		if [ ${OCT4} -gt 255 ]
+		MSG=$(curl -s -X POST -H "Content-Type: application/json" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert)
+		CODE=$(echo "${MSG}" | jq .status_code)
+		if [ ${CODE} -eq 200 ] 
 		then
-			OCT4=0
-			OCT3=$[OCT3+1]
-			if [ ${OCT3} -gt 255 ]
+			TEAMN=$[TEAMN+1]
+			OCT1=$(echo ${IP} | cut -d. -f 1)
+			OCT2=$(echo ${IP} | cut -d. -f 2)
+			OCT3=$(echo ${IP} | cut -d. -f 3)
+			OCT4=$(echo ${IP} | cut -d. -f 4)
+			OCT4=$[OCT4+1]
+			if [ ${OCT4} -gt 255 ]
 			then
-				OCT3=0
-				OCT2=$[OCT2+1]
+				OCT4=0
+				OCT3=$[OCT3+1]
+				if [ ${OCT3} -gt 255 ]
+				then
+					OCT3=0
+					OCT2=$[OCT2+1]
+				fi
 			fi
+			IP="${OCT1}.${OCT2}.${OCT3}.${OCT4}"
+		else
+			genError 407 "$(echo "${MSG}" | jq .status_message) ${IP} ${LINE} ${GETTYPE}${TEAMN}" 7
 		fi
-		IP="${OCT1}.${OCT2}.${OCT3}.${OCT4}"
-	else
-		genError 407 "$(echo "${MSG}" | jq .status_message) ${IP} ${LINE} ${GETTYPE}${TEAMN}" 7
 	fi
 done < "${FILE}"
 	initResponse

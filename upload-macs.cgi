@@ -37,13 +37,12 @@ GETTYPE=$(parseQueryString ${QUERY_STRING} "type")
 [ -z ${GETTYPE} ] && rm ${TMPFILE} && genError 100 "Insufficient parameter " 1
 checkHosttype "${GETTYPE}"
 [ ${?} -ne 0 ] && rm ${TMPFILE} && genError 101 "Invalid ACPC Host type" 2
-FILE="/acpc/adm/etc/${GETTYPE}"
+FILE="/acpc/adm/tmp/macs"
 [ ! -f ${FILE} ] && touch ${FILE}
 isWrite "${FILE}"
-[ ${?} -ne 0 ] && rm ${TMPFILE} && genError 406 "MAC file for ${GETTYPE} has no write permission" 5
+[ ${?} -ne 0 ] && rm ${TMPFILE} && genError 406 "MAC file for has no write permission" 5
 cp ${TMPFILE} ${FILE}
-#rm ${TMPFILE}
-
+rm ${TMPFILE}
 	initResponse
 	startJSON
 	insertJSON "status_code" I "200"
