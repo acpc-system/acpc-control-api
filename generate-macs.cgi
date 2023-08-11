@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 ### TO DO: read API Call return code
 ###API that generats a sequence of hosts from etc/(hostmac file) to /acpc/adm/etc/dhcp/dhcpd.conf.hosts using host-insert api
 ##	The API uses GET method, and accept  type, shost which is the start host count & sip which is the start ip
@@ -16,6 +16,7 @@ source create-json.sh
 source common.sh
 source checkers.sh
 source ipops.sh
+source macops.sh
 echo "Content-type: application/json"
 echo ""
 ### Parsing 1st, the post data
@@ -43,7 +44,7 @@ do
 	RET=${?}
 	if  [ ${RET} -eq 0 ] 
 	then
-		MSG=$(curl -s -X POST -H "Content-Type: application/json" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert)
+		MSG=$(curl -s -X POST -H "Content-Type: application/json" -u "admin:baba123" -d "{\"mac\":\"${LINE}\",\"ip\":\"${IP}\"}" http://10.0.3.2/api/team/${TEAMN}/insert)
 		CODE=$(echo "${MSG}" | jq .status_code)
 		if [ ${CODE} -eq 200 ] 
 		then
